@@ -4,7 +4,7 @@ using UnityEngine;
 namespace GameBuffs.FreeStylizedTextures
 {
     [InitializeOnLoad]
-
+    
     public static class GameBuffsInitializer
     {
         private const string GAMEBUFFS_INITIALIZED_FREETEXTURES = "GameBuffs.Initializer.FreeStylizedTextures";
@@ -18,7 +18,7 @@ namespace GameBuffs.FreeStylizedTextures
             var initializedFreeTextures = EditorPrefs.GetBool(GAMEBUFFS_INITIALIZED_FREETEXTURES, false);
             if (!initializedFreeTextures)
             {
-                EditorPrefs.SetBool(GAMEBUFFS_INITIALIZED_FREETEXTURES, true);
+                //EditorPrefs.SetBool(GAMEBUFFS_INITIALIZED_FREETEXTURES, true);
 
                 OpenMegapackUrl();
             }
@@ -32,4 +32,5 @@ namespace GameBuffs.FreeStylizedTextures
             Application.OpenURL(GAMEBUFFS_MEGAPACK_URL);
         }
     }
+    
 }

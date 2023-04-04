@@ -6,11 +6,13 @@ public class SpawnObjMovement : MonoBehaviour
 {
     public GameManager gm;
     public GameObject particles;
+    public AudioSource sound;
 
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
+        sound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

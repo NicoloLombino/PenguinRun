@@ -7,14 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    AudioSource levelUpSound;  // possibili: 26 28
     public Player player;
     public bool isInGame;
 
     [Header("Gameplay elements")]
     public float gameSpeed;
+    public float gameTimer;
     public float DistanceToNextLevel;
     public int level;
-    public float invTimer = 10;
+    public float invincibleTimer = 10;
     public int coinsNum;
 
     [Header("Spawn elements")]
@@ -47,6 +49,8 @@ public class GameManager : MonoBehaviour
         snowballText.text = "SnowBalls: " + player.snowballsNum.ToString();
         healthText.text = "Health: " + player.health.ToString();
         */
+
+        levelUpSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -57,8 +61,8 @@ public class GameManager : MonoBehaviour
             timerText.text = "Distance: " + Time.timeSinceLevelLoad.ToString();
             timerTextFinal.text = "Distance: " + Time.timeSinceLevelLoad.ToString();
 
-
-            if (Time.timeSinceLevelLoad >= timeToNextSpawn)
+            gameTimer += Time.deltaTime;
+            if (gameTimer >= timeToNextSpawn)
             {
                 SpawnObject();
                 //SpawnWallsTest();
@@ -66,10 +70,10 @@ public class GameManager : MonoBehaviour
                 spawnTimerPlus = 0;
             }
 
-            if (Time.timeSinceLevelLoad >= DistanceToNextLevel)
+            if (gameTimer >= DistanceToNextLevel)
             {
                 LevelUp();
-                DistanceToNextLevel = Time.timeSinceLevelLoad + 10;
+                DistanceToNextLevel = gameTimer + 10;
             }
         }      
     }
@@ -143,6 +147,8 @@ public class GameManager : MonoBehaviour
         gameSpeed += 3;
         level++;
         levelText.text = level.ToString();
+        player.AddSnow();
+        levelUpSound.Play();
     }
 
     private void SpawnWallsTest()
@@ -162,7 +168,7 @@ public class GameManager : MonoBehaviour
 
     public void InvinciblePlayer()
     {
-        StartCoroutine(InvincibleTimer(invTimer));
+        StartCoroutine(InvincibleTimer(invincibleTimer));
     }
 
     public IEnumerator InvincibleTimer(float invTimer)

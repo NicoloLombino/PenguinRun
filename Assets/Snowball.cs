@@ -21,8 +21,12 @@ public class Snowball : MonoBehaviour
     {
         if (other.gameObject.tag == "Wall")
         {
-            Destroy(other.gameObject);
+            other.gameObject.GetComponentInParent<SpawnObjMovement>().sound.Play();
+            other.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            other.gameObject.GetComponent<BoxCollider>().enabled = false;
+            Destroy(other.gameObject, 0.1f);
             Destroy(gameObject);
+
         }
     }
 }

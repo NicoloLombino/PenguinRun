@@ -5,7 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     CharacterController cc;
+    AudioSource music;
+
     public GameManager gm;
+    public bool isGamePC;
 
     [Header("movement")]
     public float speed;
@@ -26,30 +29,80 @@ public class Player : MonoBehaviour
     public GameObject snowballPrefab;
     public GameObject invincibleLight;
 
+    [Header("mobile component")]
+    Vector3 moveDirection;
+    Touch touch;
+    Vector3 direction;
+    Vector3 initPos;
 
 
     // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        music = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        cc.Move(transform.right * Input.GetAxis("Horizontal") * speed * Time.smoothDeltaTime - Vector3.up * 9.81f * Time.deltaTime + Vector3.up * jumpF * Time.deltaTime);
-        if(Input.GetKeyDown(KeyCode.W) && canJump)
+        if(isGamePC)
         {
-            canJump = false;
-            jumpF = jumpForce;
-            StartCoroutine(JumpTimer());
+            speed = 10;
+            cc.Move(transform.right * Input.GetAxis("Horizontal") * speed * Time.smoothDeltaTime - Vector3.up * 9.81f * Time.deltaTime + Vector3.up * jumpF * Time.deltaTime);
+
+            if (Input.GetKeyDown(KeyCode.W) && canJump)
+            {
+                canJump = false;
+                jumpF = jumpForce;
+                StartCoroutine(JumpTimer());
+            }
         }
+        else
+        {
+            speed = 0.1f;
+            cc.Move(transform.right * direction.x * speed * Time.smoothDeltaTime - Vector3.up * 9.81f * Time.deltaTime + Vector3.up * jumpF * Time.deltaTime);
+        }
+
+
         //transform.position = new Vector3(transform.position.x, transform.position.y, -25);
-        if(Input.GetKeyDown(KeyCode.S) && snowballsNum >= 1 && !isInvincible)
+        if (Input.GetKeyDown(KeyCode.S) && snowballsNum >= 1 && !isInvincible)
         {
             GameObject snowball = Instantiate(snowballPrefab, snowHole.position, snowHole.rotation);
             snowballsNum--;
             gm.snowballText.text = "SnowBalls: " + snowballsNum.ToString();
+        }
+
+        // for mobile 
+        if (Input.touchCount > 0)
+        {
+
+            touch = Input.GetTouch(0);
+            /*
+            if (touch.phase == TouchPhase.Began)
+            {
+                initPos = touch.position;
+            }
+            */
+            if (touch.phase == TouchPhase.Moved)
+            {
+                direction = touch.deltaPosition;
+                //if(direction.x < gameObject.transform.position.x)
+                //{
+                //    cc.Move(transform.right)
+                //}
+            }
+
+            else { direction = Vector3.zero; }
+
+            //moveDirection = new Vector3(touch.position.x - initPos.x,0, 0);
+
+            if (touch.phase == TouchPhase.Ended && canJump)
+            {
+                canJump = false;
+                jumpF = jumpForce;
+                StartCoroutine(JumpTimer());
+            }
         }
     }
     
@@ -66,7 +119,9 @@ public class Player : MonoBehaviour
             Debug.Log("Collisione con un muro");
             health--;
             GameObject effect = Instantiate(collision.gameObject.GetComponent<SpawnObjMovement>().particles, gameObject.transform.position, Quaternion.identity);
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            collision.gameObject.GetComponent<BoxCollider>().enabled = false;
+            Destroy(collision.gameObject,0.1f);
             Destroy(effect, 1);
             //gameObject.GetComponent<CapsuleCollider>().enabled = false;
             gm.InvinciblePlayer();
@@ -99,20 +154,29 @@ public class Player : MonoBehaviour
         else if(other.gameObject.tag == "Coin")
         {
             AddCoins(gm.coinsNum);
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<SpawnObjMovement>().sound.Play();
+            other.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            other.gameObject.GetComponent<SphereCollider>().enabled = false;
+            Destroy(other.gameObject,0.1f);
         }
 
         else if (other.gameObject.tag == "SnowBall")
         {
             AddSnow();
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<SpawnObjMovement>().sound.Play();
+            other.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            other.gameObject.GetComponent<SphereCollider>().enabled = false;
+            Destroy(other.gameObject,0.1f);
         }
 
         else if (other.gameObject.tag == "PowerUp")
         {
             gm.InvinciblePlayer();
+            other.gameObject.GetComponent<SpawnObjMovement>().sound.Play();
+            other.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            other.gameObject.GetComponent<SphereCollider>().enabled = false;
             StartCoroutine(InvincibleTimer(invincibleTimer));
-            Destroy(other.gameObject);
+            Destroy(other.gameObject, 0.1f);
         }
 
         else if (other.gameObject.tag == "Sea")
