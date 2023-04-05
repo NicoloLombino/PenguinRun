@@ -8153,7 +8153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 464507832}
-  isGamePC: 1
+  isGamePC: 0
   speed: 0.1
   jumpForce: 12
   canJump: 1

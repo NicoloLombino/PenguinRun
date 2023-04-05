@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
         }        
         gameSpeed += 3;
         level++;
-        levelText.text = level.ToString();
+        levelText.text = "Level: " + level.ToString();
         player.AddSnow();
         levelUpSound.Play();
     }

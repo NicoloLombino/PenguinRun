@@ -12,7 +12,10 @@ public class SpawnObjMovement : MonoBehaviour
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
-        sound = GetComponent<AudioSource>();
+        if(sound == null)
+        {
+            sound = GetComponent<AudioSource>();
+        }
     }
 
     // Update is called once per frame

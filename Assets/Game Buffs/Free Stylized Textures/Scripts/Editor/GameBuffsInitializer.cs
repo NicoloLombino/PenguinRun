@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GameBuffs.FreeStylizedTextures
 {
-    [InitializeOnLoad]
+    //[InitializeOnLoad]
     
     public static class GameBuffsInitializer
     {
@@ -27,9 +27,11 @@ namespace GameBuffs.FreeStylizedTextures
         /// <summary>
         /// Open the Megapack URL the first time the asset is installed
         /// </summary>
+        /// 
+        
         private static void OpenMegapackUrl()
         {
-            Application.OpenURL(GAMEBUFFS_MEGAPACK_URL);
+            //Application.OpenURL(GAMEBUFFS_MEGAPACK_URL);
         }
     }
     

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 109976434879783293}
   - component: {fileID: 109976434879783282}
   - component: {fileID: -863435319643352211}
+  - component: {fileID: 8744862276653830419}
   m_Layer: 0
   m_Name: wall3
   m_TagString: Wall
@@ -48,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gm: {fileID: 0}
   particles: {fileID: 2187138997258357582, guid: 5ecc467935d20ce438b968dda76d1751, type: 3}
-  sound: {fileID: 0}
+  sound: {fileID: 8340095005033799436, guid: c8c18313914e267498f6f6cedfe6cede, type: 3}
 --- !u!82 &-863435319643352211
 AudioSource:
   m_ObjectHideFlags: 0
@@ -145,6 +146,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &8744862276653830419
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109976434879783283}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &109976435488110001
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +174,6 @@ GameObject:
   - component: {fileID: 109976435488110013}
   - component: {fileID: 109976435488110002}
   - component: {fileID: 109976435488110003}
-  - component: {fileID: 1418733755563533343}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Wall
@@ -239,23 +255,7 @@ BoxCollider:
   m_GameObject: {fileID: 109976435488110001}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &1418733755563533343
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109976435488110001}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0

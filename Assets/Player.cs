@@ -57,53 +57,72 @@ public class Player : MonoBehaviour
                 jumpF = jumpForce;
                 StartCoroutine(JumpTimer());
             }
+
+            if (Input.GetKeyDown(KeyCode.S) && snowballsNum >= 1 /*&& !isInvincible*/)
+            {
+                GameObject snowball = Instantiate(snowballPrefab, snowHole.position, snowHole.rotation);
+                snowballsNum--;
+                gm.snowballText.text = "SnowBalls: " + snowballsNum.ToString();
+            }
         }
         else
         {
             speed = 0.1f;
             cc.Move(transform.right * direction.x * speed * Time.smoothDeltaTime - Vector3.up * 9.81f * Time.deltaTime + Vector3.up * jumpF * Time.deltaTime);
-        }
 
-
-        //transform.position = new Vector3(transform.position.x, transform.position.y, -25);
-        if (Input.GetKeyDown(KeyCode.S) && snowballsNum >= 1 && !isInvincible)
-        {
-            GameObject snowball = Instantiate(snowballPrefab, snowHole.position, snowHole.rotation);
-            snowballsNum--;
-            gm.snowballText.text = "SnowBalls: " + snowballsNum.ToString();
-        }
-
-        // for mobile 
-        if (Input.touchCount > 0)
-        {
-
-            touch = Input.GetTouch(0);
-            /*
-            if (touch.phase == TouchPhase.Began)
+            if (Input.touchCount > 0)
             {
+
+                touch = Input.GetTouch(0);
                 initPos = touch.position;
-            }
-            */
-            if (touch.phase == TouchPhase.Moved)
-            {
-                direction = touch.deltaPosition;
-                //if(direction.x < gameObject.transform.position.x)
-                //{
-                //    cc.Move(transform.right)
-                //}
-            }
+                /*
+                if (touch.phase == TouchPhase.Began)
+                {
+                    initPos = touch.position;
+                }
+                */
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    direction = touch.deltaPosition;
+                    //if(direction.x < gameObject.transform.position.x)
+                    //{
+                    //    cc.Move(transform.right)
+                    //}
+                }
 
-            else { direction = Vector3.zero; }
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    if (touch.position.y > initPos.y + 1)
+                    {
+                        if (canJump)
+                        {
+                            canJump = false;
+                            jumpF = jumpForce;
+                            StartCoroutine(JumpTimer());
+                        }
+                    }
+                    else if (touch.position.y <= initPos.y - 1)
+                    {
+                        if (snowballsNum >= 1)
+                        {
+                            GameObject snowball = Instantiate(snowballPrefab, snowHole.position, snowHole.rotation);
+                            snowballsNum--;
+                            gm.snowballText.text = "SnowBalls: " + snowballsNum.ToString();
+                        }
+                    }
+                }
 
-            //moveDirection = new Vector3(touch.position.x - initPos.x,0, 0);
+                else { direction = Vector3.zero; }
 
-            if (touch.phase == TouchPhase.Ended && canJump)
-            {
-                canJump = false;
-                jumpF = jumpForce;
-                StartCoroutine(JumpTimer());
+                //moveDirection = new Vector3(touch.position.x - initPos.x,0, 0);
+
+                
+
             }
         }
+
+
+        //transform.position = new Vector3(transform.position.x, transform.position.y, -25);        
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -119,9 +138,17 @@ public class Player : MonoBehaviour
             Debug.Log("Collisione con un muro");
             health--;
             GameObject effect = Instantiate(collision.gameObject.GetComponent<SpawnObjMovement>().particles, gameObject.transform.position, Quaternion.identity);
-            collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
-            collision.gameObject.GetComponent<BoxCollider>().enabled = false;
-            Destroy(collision.gameObject,0.1f);
+            //collision.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            //collision.gameObject.GetComponent<BoxCollider>().enabled = false;
+            GameObject blockaudio = Instantiate(collision.gameObject.GetComponent<SpawnObjMovement>().sound.gameObject);
+            foreach(Transform child in collision.transform)
+            {
+                foreach(BoxCollider col in child.GetComponents<BoxCollider>())
+                {
+                    col.enabled = false;
+                }
+            }
+            Destroy(collision.gameObject,0.2f);
             Destroy(effect, 1);
             //gameObject.GetComponent<CapsuleCollider>().enabled = false;
             gm.InvinciblePlayer();
