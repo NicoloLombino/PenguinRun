@@ -125,6 +125,26 @@ public class Player : MonoBehaviour
         //transform.position = new Vector3(transform.position.x, transform.position.y, -25);        
     }
     
+    public void Jump()
+    {
+        if (canJump)
+        {
+            canJump = false;
+            jumpF = jumpForce;
+            StartCoroutine(JumpTimer());
+        }
+    }
+
+    public void SnowBall()
+    {
+        if (snowballsNum >= 1)
+        {
+            GameObject snowball = Instantiate(snowballPrefab, snowHole.position, snowHole.rotation);
+            snowballsNum--;
+            gm.snowballText.text = "SnowBalls: " + snowballsNum.ToString();
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         /*
