@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
     Vector3 direction;
     Vector3 initPos;
 
+    private bool canSnow = true;
 
-    // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -135,11 +135,14 @@ public class Player : MonoBehaviour
 
     public void SnowBall()
     {
-        if (snowballsNum >= 1)
+        if (canSnow && snowballsNum >= 1)
         {
+            canSnow = false;
             GameObject snowball = Instantiate(snowballPrefab, snowHole.position, snowHole.rotation);
             snowballsNum--;
             gm.snowballText.text = "SnowBalls: " + snowballsNum.ToString();
+            StartCoroutine(SnowballTimer());
+
         }
     }
 
@@ -231,6 +234,12 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         jumpF = 0;
+    }
+
+    private IEnumerator SnowballTimer()
+    {
+        yield return new WaitForSeconds(1);
+        canSnow = true;
     }
 
     private IEnumerator InvincibleTimer(float timer)

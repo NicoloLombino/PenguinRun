@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text timerTextFinal;
     public TMP_Text recordText;
     public TMP_Text inputHandText;
+    public TMP_Text newRecord;
 
     [Header("UI elements")]
     [SerializeField]
@@ -57,7 +58,6 @@ public class GameManager : MonoBehaviour
 
     private InputLeftOrRight inputHand;
 
-    // Start is called before the first frame update
     void Start()
     {
         record = PlayerPrefs.GetFloat("Record");
@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelUp()
     {
-        if (spawnTimer > 1.5)
+        if (spawnTimer > 1)
         {
             spawnTimer -= 0.5f;
         }        
@@ -177,21 +177,6 @@ public class GameManager : MonoBehaviour
         levelText.text = "Level: " + level.ToString();
         player.AddSnow();
         levelUpSound.Play();
-    }
-
-    private void SpawnWallsTest()
-    {
-        int rnd = UnityEngine.Random.Range(0, spawnObjects.Length);
-        Debug.Log(rnd);
-        GameObject Object = Instantiate(spawnObjects[rnd], gameObject.transform.position, Quaternion.identity);
-        SpawnPosition(Object);
-
-        switch (rnd)
-        {
-            case 2:
-                Wall2Lengh(Object);
-                break;
-        }
     }
 
     public void InvinciblePlayer()
@@ -232,9 +217,11 @@ public class GameManager : MonoBehaviour
 
     public void CheckRecord()
     {
-        if(timeOfGame > record)
+        double score = Math.Round(timeOfGame, 2);
+        if (score > record)
         {
-            PlayerPrefs.SetFloat("Record", (float)timeOfGame);
+            PlayerPrefs.SetFloat("Record", (float)score);
+            newRecord.gameObject.SetActive(true);
         }
     }
 
@@ -280,6 +267,11 @@ public class GameManager : MonoBehaviour
         }
 
         inputHandText.text = "INPUT: " + inputHand.ToString();
+    }
 
+
+    public void OpenWebSite(string url)
+    {
+        Application.OpenURL(url);
     }
 }

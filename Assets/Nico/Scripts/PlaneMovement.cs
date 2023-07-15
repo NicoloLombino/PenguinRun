@@ -15,9 +15,9 @@ public class PlaneMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position -= new Vector3(0, 0, gm.gameSpeed * Time.deltaTime);
+        transform.position -= new Vector3(0, 0, Mathf.Min(gm.gameSpeed, 50) * Time.deltaTime);
 
-        if (transform.position.z <= -30)
+        if (transform.position.z <= -40)
         {
             transform.position = new Vector3(0, 0, 0);
         }
